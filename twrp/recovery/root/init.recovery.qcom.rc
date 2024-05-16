@@ -68,7 +68,8 @@ on property:twrp.modules.loaded=true
     wait /sys/class/power_supply/battery
     #start health-default
     start health-hal-2-1
-    start vendor.oplus.vibrator
+    # disable vibrator for PBRP
+    #start vendor.oplus.vibrator
     umount /firmware
 
 on property:twrp.all.users.decrypted=true
