@@ -69,7 +69,7 @@ on property:twrp.modules.loaded=true
     #start health-default
     start health-hal-2-1
     # disable vibrator for PBRP
-    #start vendor.oplus.vibrator
+    start vendor.oplus.vibrator
     umount /firmware
 
 on property:twrp.all.users.decrypted=true
