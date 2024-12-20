@@ -80,7 +80,7 @@ BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
 BOARD_SUPER_PARTITION_SIZE := 17179869184
 BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
 BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 17175674880 # BOARD_SUPER_PARTITION_SIZE - 4MB
-BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := my_bigball my_product my_stock my_carrier my_company my_engineering my_heytap my_manifest my_preload my_region system system_ext product vendor vendor_dlkm odm
+BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor vendor_dlkm odm
 
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 104857600
 
