@@ -1,2 +1,4 @@
 # Battery Property
 ro.charger.enable_suspend=1
+# VAB
+ro.virtual_ab.enabled=true
