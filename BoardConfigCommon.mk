@@ -174,6 +174,9 @@ TW_LOAD_VENDOR_MODULES_EXCLUDE_GKI := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_HAS_EDL_MODE := true
 
+# Build partition tools (lptools,lpdump)
+TW_ENABLE_ALL_PARTITION_TOOLS := true
+
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true
 TARGET_USES_LOGD := true
