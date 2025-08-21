@@ -177,6 +177,9 @@ TW_HAS_EDL_MODE := true
 # Build partition tools (lptools,lpdump)
 TW_ENABLE_ALL_PARTITION_TOOLS := true
 
+PB_TORCH_PATH := "/sys/class/leds/led:switch_0/brightness"
+PB_TORCH_MAX_BRIGHTNESS := 1
+
 # TWRP Debug Flags
 #TWRP_EVENT_LOGGING := true
 TARGET_USES_LOGD := true
