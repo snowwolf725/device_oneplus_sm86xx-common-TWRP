@@ -1,34 +1,18 @@
-# Copyright (C) 2016 The CyanogenMod Project
-# Copyright (C) 2019 The OmniRom Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
-#
-# This file is the build configuration for a full Android
-# build for grouper hardware. This cleanly combines a set of
-# device-specific aspects (drivers) with a device-agnostic
-# product configuration (apps).
-#
-
-# Inherit from common AOSP config
+# Configure base.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
+
+# Configure core_64_bit_only.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
 
-# Enable project quotas and casefolding for emulated storage without sdcardfs
+# Configure emulated_storage.mk
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-# Installs gsi keys into ramdisk, to boot a GSI with verified boot.
-$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
+# Configure twrp config common.mk
+#$(call inherit-product, vendor/twrp/config/common.mk)
+
+# Virtual A/B
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 
 # Platform
 QCOM_BOARD_PLATFORMS += $(PRODUCT_PLATFORM)
@@ -42,11 +26,24 @@ RELAX_USES_LIBRARY_CHECK := true
 # A/B support
 AB_OTA_UPDATER := true
 
-# VNDK
+# API
+BOARD_SHIPPING_API_LEVEL := 31
+PRODUCT_SHIPPING_API_LEVEL := 31
 PRODUCT_TARGET_VNDK_VERSION := 31
 
-# Virtual A/B
-$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+# Dynamic partitions
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
+# Enable Fuse Passthrough
+PRODUCT_PROPERTY_OVERRIDES += persist.sys.fuse.passthrough.enable=true
+
+
+#Support to compile recovery without msm headers
+TARGET_HAS_GENERIC_KERNEL_HEADERS := true
+
+# OEM otacerts
+PRODUCT_EXTRA_RECOVERY_KEYS += \
+    $(COMMON_PATH)/security/otacert
 
 # A/B updater updatable partitions list. Keep in sync with the partition list
 # with "_a" and "_b" variants in the device. Note that the vendor can add more
@@ -56,10 +53,10 @@ AB_OTA_PARTITIONS += boot init_boot vendor_boot recovery dtbo \
     engineering_cdt featenabler hyp imagefv keymaster modem \
     oplusstanvbk qupfw shrm splash tz uefi uefisecapp \
     xbl xbl_config xbl_ramdump\
-    vbmeta vbmeta_system vbmeta_vendor 
+    vbmeta vbmeta_system vbmeta_vendor
 #    system system_ext system_dlkm product vendor vendor_dlkm \
 #    my_bigball my_carrier my_company my_engineering my_heytap \
-#    my_manifest my_preload my_product my_region my_stock odm 
+#    my_manifest my_preload my_product my_region my_stock odm
 
 # A/B related packages
 PRODUCT_PACKAGES += update_engine \
@@ -88,18 +85,6 @@ AB_OTA_POSTINSTALL_CONFIG += \
     FILESYSTEM_TYPE_vendor=ext4 \
     POSTINSTALL_OPTIONAL_vendor=true
 
-# Set GRF/Vendor freeze properties
-BOARD_SHIPPING_API_LEVEL := 31
-BOARD_API_LEVEL := 31
-SHIPPING_API_LEVEL := 31
-PRODUCT_SHIPPING_API_LEVEL := 31
-
-#Support to compile recovery without msm headers
-TARGET_HAS_GENERIC_KERNEL_HEADERS := true
-
-# Dynamic partitions
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
-
 # fastbootd
 PRODUCT_PACKAGES += fastbootd
 
@@ -121,11 +106,6 @@ SOONG_CONFIG_NAMESPACES += ufsbsg
 
 SOONG_CONFIG_ufsbsg += ufsframework
 SOONG_CONFIG_ufsbsg_ufsframework := bsg
-
-# OEM otacerts
-PRODUCT_EXTRA_RECOVERY_KEYS += \
-    $(COMMON_PATH)/security/otacert
-
 
 # System AVB
 BOARD_AVB_VBMETA_SYSTEM := system

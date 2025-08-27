@@ -1,37 +1,15 @@
-#
-# Copyright 2017 The Android Open Source Project
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
-# This contains the module build definitions for the hardware-specific
-# components for this device.
-#
-# As much as possible, those components should be built unconditionally,
-# with device-specific names to avoid collisions, to avoid device-specific
-# bitrot and build breakages. Building a component unconditionally does
-# *not* include it on all devices, so it is safe even with hardware-specific
-# components.
+
 
 # SDK
-BOARD_SYSTEMSDK_VERSIONS := 31
+#BOARD_SYSTEMSDK_VERSIONS := 31
 
 # Architecture
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-a-branchprot
+TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := kryo385
+TARGET_CPU_VARIANT := generic
 
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-2a
@@ -52,7 +30,7 @@ BOARD_KERNEL_IMAGE_NAME := kernel
 BOARD_RAMDISK_USE_LZ4 := true
 TARGET_PREBUILT_KERNEL := $(COMMON_PATH)/prebuilt/$(BOARD_KERNEL_IMAGE_NAME)
 
-# Partition Info
+# Partitions
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
 
 TARGET_COPY_OUT_ODM := odm
@@ -86,6 +64,7 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 104857600
 
 # Workaround for error copying vendor files to recovery ramdisk
 TARGET_COPY_OUT_VENDOR := vendor
+
 
 # Rules
 BUILD_BROKEN_DUP_RULES := true
@@ -177,7 +156,7 @@ TW_HAS_EDL_MODE := true
 # Build partition tools (lptools,lpdump)
 TW_ENABLE_ALL_PARTITION_TOOLS := true
 
-PB_TORCH_PATH := "/sys/class/leds/led:torch_0"
+PB_TORCH_PATH := "/sys/class/leds/led:torch_0/brightness"
 PB_TORCH_MAX_BRIGHTNESS := 500
 
 # TWRP Debug Flags
@@ -201,3 +180,50 @@ ifneq ($(wildcard bootable/recovery/installer/.),)
 endif
 # end local build flags
 #
+
+##Tet
+
+# Init
+#TARGET_RECOVERY_DEVICE_MODULES := libhidlmemory
+#TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
+
+# Recovery
+BOARD_HAS_LARGE_FILESYSTEM := true
+
+# Crypto
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+TW_INCLUDE_OMAPI := true
+TW_OMAPI_UUID := 534552454144595f48414c5f55554944
+TW_USE_FSCRYPT_POLICY := 2
+BOOT_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
+
+
+# Tool
+TW_INCLUDE_7ZA := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_INCLUDE_LIBRESETPROP := true
+
+# F2FS
+TW_ENABLE_FS_COMPRESSION := false
+
+# Fastbootd
+TW_INCLUDE_FASTBOOTD := true
+
+# Other TWRP Configurations
+TW_FRAMERATE := 120
+TARGET_RECOVERY_QCOM_RTC_FIX := true
+TW_INCLUDE_NTFS_3G := true
+TW_USE_DMCTL := true
+TW_USE_TOOLBOX := true
+TW_INCLUDE_FUSE_EXFAT := true
+TW_INCLUDE_FUSE_NTFS := true
+TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_MAX_BRIGHTNESS := 2047
+TW_DEFAULT_BRIGHTNESS := 250
+TW_SUPPORT_INPUT_AIDL_HAPTICS_FQNAME := "IVibrator/vibratorfeature"
+TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone1/temp" # CPU-0-0-0
+TW_BACKUP_EXCLUSIONS := /data/fonts
+TW_DEVICE_VERSION := $(TW_RELEASE_PRODUCT_NAME)-A15
+
